@@ -26,10 +26,7 @@ mediansteps <-median(sumstepday)
         from 2012-10-01 until 2012-11-30
 - Missing values in the data set were ignored 
 - The mean total number of steps taken per day was **9354**
-- The median of the total number of steps taken per day was **10395**
-- The maximum number of steps taken during the period was 21194
-- The minimum number of steps taken during the period was 0
-
+- The median total number of steps taken per day was **10395**
 
 ### Make a histogram of the total number of steps taken each day
 
@@ -39,7 +36,7 @@ par(mar=c(7.0, 7.0, 4.5, 4.5))
 sumstepday <-with(actdata, tapply(steps, date,sum,na.rm=TRUE))
 hist(sumstepday,col="green", 
      breaks = 7,
-     main = "Histogram of Total Step/Day", xlab = "Total Steps/Day")
+     main = "Histogram of Total Number of Step/Day", xlab = "Total Steps/Day")
 box()
 ```
 
@@ -55,13 +52,11 @@ box()
 meanintersteps <- as.integer(with(actdata, tapply(steps, interval,mean,na.rm=TRUE)))
 par(mar=c(7.0, 7.0, 4.5, 4.5))
 max_y <- max(meanintersteps)
-intervals <-c(0:287)
-max_x <- max(intervals)
-plot(intervals, meanintersteps,type="l",
+plot(meanintersteps,type="l",
         xlab= "5-Minute Intervals (288 5-Minute Intervals/Day)", 
         ylab = "Average Steps/Interval",
         ylim=c(0,max_y*1.1),
-        xlim=c(0,max_x*1.05))
+        xlim=c(0,length(meanintersteps)*1.05))
 axis(2, las=0) # Axis label parallel to axis
 box()
 title(main = "Time Series Plot of the 5-Minute Intervals\n and the Average Number of Steps Taken\n Averaged Across All 61 Days", cex.main=0.9999)
@@ -127,7 +122,7 @@ for (i in 1:dim(actdatadtnoNA)[1])
 
 ```r
 # Sum steps for each day
-sumstepdaynoNA <-with(actdatadtnoNA, tapply(steps, date,sum,na.rm=TRUE))
+sumstepdaynoNA <-with(actdatadtnoNA, tapply(steps, date,sum))
 # Get the the mean of the total number of steps/day - 
 meanstepsnoNA <- as.integer(mean(sumstepdaynoNA))
 # Get the median of the total number of steps/day
@@ -148,7 +143,6 @@ medianstepsnoNA <-median(sumstepdaynoNA)
 
 ```r
 par(mar=c(7.0, 7.0, 4.5, 4.5))
-sumstepdaynoNA <-with(actdatadtnoNA, tapply(steps, date,sum,na.rm=TRUE))
 hist(sumstepdaynoNA,col="blue", 
      breaks = 7,
      main = "Histogram of Total Step/Day With MIssing Values Filled In ", xlab = "Total Steps/Day")
@@ -204,7 +198,6 @@ library(dplyr)
 ```
 
 ```r
-library(ggplot2)
 library(lattice)
 #
 actdays <- weekdays(actdatadtnoNA$datetimect)
@@ -217,21 +210,12 @@ actdatadtnoNA <- cbind(actdays,actdatadtnoNA)
 
 groupintdays<- group_by(actdatadtnoNA,interval,actdays)
 sumintdays<- summarise(groupintdays,mean=as.integer(mean(steps)))
-#png(file= "plot6.png",width = 480, height = 480)
-g<-ggplot(sumintdays, aes(x=interval,y=mean, group=actdays))
-g + geom_line(size=1.5,aes(colour = actdays)) +
-        ggtitle("Comparing Weekdays With Weekends") +
-        labs(x="Intervals",y="Steps") 
+xyplot( mean ~ interval | actdays, data=sumintdays,  
+        layout=c(1,2),type= "l",
+        xlab = "Interval",
+        ylab = "Mean steps/interval",
+        main = "Panel Plot Showing the Difference in \n Activity Patterns Between Weekdays and Weekends")
 ```
 
 ![](PA1_Template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
-
-```r
-xyplot( mean ~ interval | actdays, data=sumintdays,  
-        layout=c(1,2),type= "l",
-        xlab = "Interval (Raw Intervals from dataset)",
-        ylab = "Mean steps/interval")
-```
-
-![](PA1_Template_files/figure-html/unnamed-chunk-10-2.png)<!-- -->
 
