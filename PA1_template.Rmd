@@ -21,8 +21,10 @@ actdata<- read.csv("./data/activity.csv")
 sumstepday <-with(actdata, tapply(steps, date,sum,na.rm=TRUE))
 # Get the the mean of the total number of steps/day - 
 meansteps <- as.integer(mean(sumstepday))
+meansteps
 # Get the median of the total number of steps/day
 mediansteps <-median(sumstepday)
+mediansteps
 ```
 
 - Data was collected over `r length(sumstepday)` days
@@ -61,7 +63,9 @@ axis(2, las=0) # Axis label parallel to axis
 box()
 title(main = "Time Series Plot of the 5-Minute Intervals\n and the Average Number of Steps Taken\n Averaged Across All 61 Days", cex.main=0.9999)
 maxinterval <- which.max(meanintersteps)
+maxinterval
 maxsteps <- max(meanintersteps)
+maxsteps
 maxtime <- paste(as.integer(maxinterval*5/60),":",(maxinterval*5)%%60," am", sep = "")
 ```
 
@@ -74,6 +78,7 @@ maxtime <- paste(as.integer(maxinterval*5/60),":",(maxinterval*5)%%60," am", sep
 
 ```{r}
 summissval <- sum(is.na(actdata$steps))
+summissval
 ```
 
 - The number of missing values in the dataset is **`r summissval`**
@@ -117,8 +122,10 @@ for (i in 1:dim(actdatadtnoNA)[1])
 sumstepdaynoNA <-with(actdatadtnoNA, tapply(steps, date,sum))
 # Get the the mean of the total number of steps/day - 
 meanstepsnoNA <- as.integer(mean(sumstepdaynoNA))
+meanstepsnoNA
 # Get the median of the total number of steps/day
 medianstepsnoNA <-median(sumstepdaynoNA)
+medianstepsnoNA
 # Get the minimum steps/day
 ```
 
